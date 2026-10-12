@@ -11,40 +11,27 @@ class PromoBannerSeeder extends Seeder
     {
         PromoBanner::create([
             'position' => 'home_promo',
-            'subtitle' => 'Weekend Sale',
-            'title' => 'Lighting & Accessories',
-            'description' => '25% off',
-            'button_text' => 'Shop Now',
-            'button_url' => '/category/lighting',
-            'image' => 'assets/images/demos/demo-13/banners/banner-1.jpg',
-            'column_class' => 'col-md-3',
+            'subtitle' => 'The Menswear Edit',
+            'title' => "Structured Silhouettes &\nOrganic Textures",
+            'description' => 'Explore the collection',
+            'button_text' => 'Discover Men',
+            'button_url' => '/category/men',
+            'image' => 'assets/images/mainImages/bannerMen.gif',
+            'column_class' => 'col-md-6',
             'sort_order' => 1,
             'is_active' => true,
         ]);
 
         PromoBanner::create([
             'position' => 'home_promo',
-            'subtitle' => 'Amazing Value',
-            'title' => 'Clothes Trending Spring Collection',
-            'description' => 'from $12.99',
-            'button_text' => 'Discover Now',
-            'button_url' => '/category/clothing',
-            'image' => 'assets/images/demos/demo-13/banners/banner-2.jpg',
+            'subtitle' => 'The Womenswear Capsule',
+            'title' => "Effortless Drapery &\nBreathable Weaves",
+            'description' => 'Mindful daily luxury',
+            'button_text' => 'Discover Women',
+            'button_url' => '/category/women',
+            'image' => 'assets/images/mainImages/BannerWomen.avif',
             'column_class' => 'col-md-6',
             'sort_order' => 2,
-            'is_active' => true,
-        ]);
-
-        PromoBanner::create([
-            'position' => 'home_promo',
-            'subtitle' => 'Smart Offer',
-            'title' => 'Anniversary Special',
-            'description' => '15% off',
-            'button_text' => 'Shop Now',
-            'button_url' => '/shop?sale=1',
-            'image' => 'assets/images/demos/demo-13/banners/banner-3.jpg',
-            'column_class' => 'col-md-3',
-            'sort_order' => 3,
             'is_active' => true,
         ]);
     }

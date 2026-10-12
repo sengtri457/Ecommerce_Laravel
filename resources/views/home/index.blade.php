@@ -14,7 +14,6 @@
 
     @include('home._brands')
     @include('home._newsletter')
-    @include('home._latest-posts')
     @include('home._features')
 </main>
 @endsection

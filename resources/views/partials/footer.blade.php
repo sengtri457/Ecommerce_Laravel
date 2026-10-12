@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-sm-12 col-lg-6">
                     <div class="widget widget-about">
-                        <img src="{{ asset($settings['site_logo_footer'] ?? 'assets/images/demos/demo-13/logo-footer.png') }}" class="footer-logo" alt="{{ $settings['site_name'] ?? 'Molla' }}" width="105" height="25">
+                        <img src="{{ asset($settings['site_logo_footer'] ?? 'assets/images/mainImages/logoDevs.png') }}" class="footer-logo" alt="{{ $settings['site_name'] ?? 'Clothes™' }}" style="max-height: 48px; width: auto; object-fit: contain;">
                         <p>{{ $settings['footer_text'] ?? '' }}</p>
                         
                         <div class="widget-about-info">
@@ -68,7 +68,7 @@
 
     <div class="footer-bottom">
         <div class="container">
-            <p class="footer-copyright">{{ $settings['copyright_text'] ?? 'Copyright © 2026 Molla Store. All Rights Reserved.' }}</p>
+            <p class="footer-copyright">{{ $settings['copyright_text'] ?? 'Copyright © 2026 Clothes™. All Rights Reserved.' }}</p>
             <ul class="footer-menu">
                 <li><a href="{{ route('pages.show', 'terms-conditions') }}">Terms Of Use</a></li>
                 <li><a href="{{ route('pages.show', 'privacy-policy') }}">Privacy Policy</a></li>

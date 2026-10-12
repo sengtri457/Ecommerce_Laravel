@@ -16,19 +16,11 @@ class WishlistController extends Controller
      */
     public function index(): View
     {
-        $token = get_cart_session_token();
-        $userId = Auth::id();
-
-        $wishlistItems = WishlistItem::with(['product.images', 'product.category'])
-            ->where(function ($q) use ($token, $userId) {
-                if ($userId) {
-                    $q->where('user_id', $userId)->orWhere('session_token', $token);
-                } else {
-                    $q->where('session_token', $token);
-                }
-            })
+        $wishlistItems = WishlistItem::forCurrentSession()
+            ->with(['product.images', 'product.category'])
             ->latest()
-            ->get();
+            ->paginate(10)
+            ->withQueryString();
 
         return view('wishlist.index', [
             'pageTitle' => 'My Wishlist - '.setting('site_name', 'Molla'),

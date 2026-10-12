@@ -22,12 +22,14 @@ class HomeController extends Controller
         $featuredCategories = Category::active()->featured()->orderBy('sort_order')->get();
         $promoBanners = PromoBanner::active()->where('position', 'home_promo')->get();
         $features = Feature::active()->where('position', 'home_services')->get();
-        $homeSections = HomeSection::active()->get();
+        $homeSections = HomeSection::active()->get()->each(function (HomeSection $section) {
+            $section->setRelation('loadedProducts', $section->resolveProducts());
+        });
         $brands = Brand::active()->get();
         $latestPosts = BlogPost::published()->with(['category', 'author'])->take(3)->get();
 
         return view('home.index', [
-            'pageTitle' => setting('site_name', 'Molla').' - Home',
+            'pageTitle' => setting('site_name', 'Clothes™').' — Minimalism in Everyday Wear',
             'slides' => $slides,
             'featuredCategories' => $featuredCategories,
             'promoBanners' => $promoBanners,

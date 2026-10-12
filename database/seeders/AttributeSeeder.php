@@ -10,7 +10,7 @@ class AttributeSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Color attribute
+        // 1. Color attribute (Clothes Warm Earth & Neutral Palette)
         $color = Attribute::create([
             'name' => 'Color',
             'slug' => 'color',
@@ -18,11 +18,12 @@ class AttributeSeeder extends Seeder
         ]);
 
         $colors = [
-            ['value' => 'Black', 'color_code' => '#333333', 'sort_order' => 1],
-            ['value' => 'White', 'color_code' => '#ffffff', 'sort_order' => 2],
-            ['value' => 'Blue', 'color_code' => '#3399cc', 'sort_order' => 3],
-            ['value' => 'Red', 'color_code' => '#cc3333', 'sort_order' => 4],
-            ['value' => 'Gold', 'color_code' => '#f2a900', 'sort_order' => 5],
+            ['value' => 'Charcoal Black', 'color_code' => '#1A1A1A', 'sort_order' => 1],
+            ['value' => 'Warm Canvas White', 'color_code' => '#FAFAF8', 'sort_order' => 2],
+            ['value' => 'Terracotta Clay', 'color_code' => '#A35C49', 'sort_order' => 3],
+            ['value' => 'Oatmeal Beige', 'color_code' => '#D8D2C2', 'sort_order' => 4],
+            ['value' => 'Slate Navy', 'color_code' => '#2C3E50', 'sort_order' => 5],
+            ['value' => 'Olive Sage', 'color_code' => '#4B5320', 'sort_order' => 6],
         ];
 
         foreach ($colors as $c) {
@@ -34,7 +35,7 @@ class AttributeSeeder extends Seeder
             ]);
         }
 
-        // 2. Size attribute
+        // 2. Size attribute (Standard Apparel Curve)
         $size = Attribute::create([
             'name' => 'Size',
             'slug' => 'size',
@@ -42,10 +43,12 @@ class AttributeSeeder extends Seeder
         ]);
 
         $sizes = [
-            ['value' => 'Small', 'sort_order' => 1],
-            ['value' => 'Medium', 'sort_order' => 2],
-            ['value' => 'Large', 'sort_order' => 3],
-            ['value' => 'Extra Large', 'sort_order' => 4],
+            ['value' => 'XS', 'sort_order' => 1],
+            ['value' => 'S', 'sort_order' => 2],
+            ['value' => 'M', 'sort_order' => 3],
+            ['value' => 'L', 'sort_order' => 4],
+            ['value' => 'XL', 'sort_order' => 5],
+            ['value' => 'XXL', 'sort_order' => 6],
         ];
 
         foreach ($sizes as $s) {
@@ -53,28 +56,6 @@ class AttributeSeeder extends Seeder
                 'attribute_id' => $size->id,
                 'value' => $s['value'],
                 'sort_order' => $s['sort_order'],
-            ]);
-        }
-
-        // 3. Storage attribute
-        $storage = Attribute::create([
-            'name' => 'Storage',
-            'slug' => 'storage',
-            'type' => 'text',
-        ]);
-
-        $storages = [
-            ['value' => '64GB', 'sort_order' => 1],
-            ['value' => '128GB', 'sort_order' => 2],
-            ['value' => '256GB', 'sort_order' => 3],
-            ['value' => '512GB', 'sort_order' => 4],
-        ];
-
-        foreach ($storages as $st) {
-            AttributeValue::create([
-                'attribute_id' => $storage->id,
-                'value' => $st['value'],
-                'sort_order' => $st['sort_order'],
             ]);
         }
     }

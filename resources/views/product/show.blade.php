@@ -63,28 +63,23 @@
                             @csrf
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
 
-                            @php
-                                $colors = $product->attributeValues->where('attribute.type', 'color');
-                                $sizes = $product->attributeValues->where('attribute.type', 'text');
-                            @endphp
-
-                            @if($colors->count() > 0)
+                            @if($product->colorAttributes()->isNotEmpty())
                                 <div class="details-filter-row details-row-size">
                                     <label>Color:</label>
                                     <div class="product-nav product-nav-dots">
-                                        @foreach($colors as $col)
+                                        @foreach($product->colorAttributes() as $col)
                                             <span class="mr-2 px-2 py-1 border rounded" style="background-color: {{ $col->color_code ?? '#eee' }}; font-size: 1.1rem;">{{ $col->value }}</span>
                                         @endforeach
                                     </div>
                                 </div>
                             @endif
 
-                            @if($sizes->count() > 0)
+                            @if($product->optionAttributes()->isNotEmpty())
                                 <div class="details-filter-row details-row-size">
                                     <label for="size">Options:</label>
                                     <div class="select-custom">
                                         <select name="attribute_value_id" id="size" class="form-control">
-                                            @foreach($sizes as $sz)
+                                            @foreach($product->optionAttributes() as $sz)
                                                 <option value="{{ $sz->id }}">{{ $sz->value }}</option>
                                             @endforeach
                                         </select>

@@ -25,9 +25,9 @@ class MollaStoreTest extends TestCase
         $response = $this->get('/');
 
         $response->assertStatus(200);
-        $response->assertSee('MacBook Air');
-        $response->assertSee('Browse Categories');
-        $response->assertSee('Explore Popular Categories');
+        $response->assertSee('Minimalism in');
+        $response->assertSee('Collections');
+        $response->assertSee('Explore Curated Categories');
     }
 
     public function test_shop_and_category_pages_load(): void

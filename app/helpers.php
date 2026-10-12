@@ -10,15 +10,7 @@ if (! function_exists('money')) {
     function money(float|int|string|null $amount): string
     {
         $amount = (float) ($amount ?? 0);
-        $symbol = '$';
-
-        try {
-            if (class_exists(Setting::class)) {
-                $symbol = Setting::get('currency_symbol', '$');
-            }
-        } catch (Throwable $e) {
-            $symbol = '$';
-        }
+        $symbol = setting('currency_symbol', '$');
 
         return $symbol.number_format($amount, 2);
     }

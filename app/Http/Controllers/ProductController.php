@@ -15,13 +15,14 @@ class ProductController extends Controller
     {
         $product = Product::active()
             ->where('slug', $slug)
-            ->with(['images', 'category', 'brand', 'attributeValues.attribute', 'reviews.user'])
+            ->with(['images', 'category', 'brand', 'attributeValues.attribute', 'approvedReviews.user'])
             ->firstOrFail();
 
         $relatedProducts = Product::active()
             ->where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
             ->with(['images', 'category'])
+            ->withRatingSummary()
             ->take(4)
             ->get();
 

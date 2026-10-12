@@ -10,16 +10,16 @@ class SettingsSeeder extends Seeder
     public function run(): void
     {
         $settings = [
-            'site_name' => 'Molla eCommerce',
-            'site_logo' => 'assets/images/demos/demo-13/logo.png',
-            'site_logo_footer' => 'assets/images/demos/demo-13/logo-footer.png',
-            'phone' => '+0123 456 789',
-            'email' => 'contact@molla.com',
-            'address' => '70 Washington Square South, New York, NY 10012, United States',
-            'footer_text' => 'Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus.',
+            'site_name' => 'Clothes™',
+            'site_logo' => 'assets/images/mainImages/logoDevs.png',
+            'site_logo_footer' => 'assets/images/mainImages/logoDevs.png',
+            'phone' => '+1 (800) 234-5678',
+            'email' => 'concierge@clothesbrand.com',
+            'address' => '42 Crosby Street, SoHo, New York, NY 10012',
+            'footer_text' => 'Clothes™ is built on the premise that everyday wear should be intentional, elevated, and timeless. Accessible conscious luxury designed for mindful living.',
             'currency_symbol' => '$',
             'payment_icons' => 'assets/images/payments.png',
-            'copyright_text' => 'Copyright © 2026 Molla Store. All Rights Reserved.',
+            'copyright_text' => 'Copyright © 2026 Clothes™. All Rights Reserved.',
         ];
 
         foreach ($settings as $key => $value) {

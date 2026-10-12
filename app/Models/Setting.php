@@ -9,30 +9,45 @@ class Setting extends Model
     protected $fillable = ['key', 'value'];
 
     /**
-     * Get a setting by key with fallback default.
+     * In-memory cache for loaded settings in current lifecycle.
+     *
+     * @var array<string, mixed>|null
+     */
+    protected static ?array $memoized = null;
+
+    /**
+     * Retrieve a setting by key with a fallback default.
      */
     public static function get(string $key, mixed $default = null): mixed
     {
-        try {
-            $setting = static::where('key', $key)->first();
+        $settings = static::getAll();
 
-            return $setting ? $setting->value : $default;
-        } catch (\Throwable $e) {
-            return $default;
-        }
+        return $settings[$key] ?? $default;
     }
 
     /**
-     * Get all settings as key-value pairs.
+     * Retrieve all settings as key-value pairs (memoized).
      *
      * @return array<string, mixed>
      */
     public static function getAll(): array
     {
+        if (static::$memoized !== null) {
+            return static::$memoized;
+        }
+
         try {
-            return static::pluck('value', 'key')->toArray();
-        } catch (\Throwable $e) {
+            return static::$memoized = static::pluck('value', 'key')->all();
+        } catch (\Throwable) {
             return [];
         }
+    }
+
+    /**
+     * Clear the in-memory settings cache.
+     */
+    public static function clearCache(): void
+    {
+        static::$memoized = null;
     }
 }

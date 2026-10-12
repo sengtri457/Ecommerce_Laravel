@@ -52,6 +52,16 @@ class Category extends Model
         return $this->hasMany(Product::class);
     }
 
+    /**
+     * Get IDs of this category and its active children.
+     *
+     * @return array<int>
+     */
+    public function allCategoryAndChildrenIds(): array
+    {
+        return $this->children()->pluck('id')->prepend($this->id)->all();
+    }
+
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);

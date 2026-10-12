@@ -45,7 +45,8 @@ class BlogController extends Controller
         $posts = BlogPost::published()
             ->where('blog_category_id', $category->id)
             ->with(['category', 'author', 'comments'])
-            ->paginate(6);
+            ->paginate(6)
+            ->withQueryString();
 
         return view('blog.index', [
             'pageTitle' => $category->name.' - Blog - '.setting('site_name', 'Molla'),
@@ -64,7 +65,8 @@ class BlogController extends Controller
         $posts = $tag->posts()
             ->published()
             ->with(['category', 'author', 'comments'])
-            ->paginate(6);
+            ->paginate(6)
+            ->withQueryString();
 
         return view('blog.index', [
             'pageTitle' => '#'.$tag->name.' - Blog - '.setting('site_name', 'Molla'),

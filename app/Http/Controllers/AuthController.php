@@ -16,12 +16,8 @@ class AuthController extends Controller
     /**
      * Show login form.
      */
-    public function showLogin(): View|RedirectResponse
+    public function showLogin(): View
     {
-        if (Auth::check()) {
-            return redirect()->route('account.dashboard');
-        }
-
         return view('auth.login', [
             'pageTitle' => 'Sign In - '.setting('site_name', 'Molla'),
         ]);
@@ -39,11 +35,12 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-
-            // Merge guest cart and wishlist
             $this->mergeGuestData(Auth::id());
 
-            return redirect()->intended(route('account.dashboard'))->with('success', 'Welcome back, '.Auth::user()->name.'!');
+            $user = Auth::user();
+            $targetRoute = $user->isAdmin() ? route('admin.dashboard') : route('account.dashboard');
+
+            return redirect()->intended($targetRoute)->with('success', 'Welcome back, '.$user->name.'!');
         }
 
         return back()->withInput($request->only('email'))->withErrors([
@@ -54,12 +51,8 @@ class AuthController extends Controller
     /**
      * Show registration form.
      */
-    public function showRegister(): View|RedirectResponse
+    public function showRegister(): View
     {
-        if (Auth::check()) {
-            return redirect()->route('account.dashboard');
-        }
-
         return view('auth.register', [
             'pageTitle' => 'Create Account - '.setting('site_name', 'Molla'),
         ]);
@@ -87,8 +80,6 @@ class AuthController extends Controller
 
         Auth::login($user);
         $request->session()->regenerate();
-
-        // Merge guest cart and wishlist
         $this->mergeGuestData($user->id);
 
         return redirect()->route('account.dashboard')->with('success', 'Your account has been created successfully!');
@@ -107,19 +98,38 @@ class AuthController extends Controller
     }
 
     /**
-     * Merge guest cart and wishlist data into authenticated user.
+     * Merge guest cart and wishlist data into authenticated user safely.
      */
     private function mergeGuestData(int $userId): void
     {
         $token = get_cart_session_token();
 
-        // Merge cart
+        // 1. Merge Shopping Cart
         $guestCart = Cart::where('session_token', $token)->first();
         if ($guestCart) {
-            $guestCart->update(['user_id' => $userId]);
+            $userCart = Cart::where('user_id', $userId)->where('id', '!=', $guestCart->id)->first();
+            if ($userCart) {
+                foreach ($guestCart->items as $item) {
+                    $existingItem = $userCart->items()->where('product_id', $item->product_id)->first();
+                    if ($existingItem) {
+                        $existingItem->increment('quantity', $item->quantity);
+                    } else {
+                        $item->update(['cart_id' => $userCart->id]);
+                    }
+                }
+                $guestCart->delete();
+            } else {
+                $guestCart->update(['user_id' => $userId]);
+            }
         }
 
-        // Merge wishlist
-        WishlistItem::where('session_token', $token)->update(['user_id' => $userId]);
+        // 2. Merge Wishlist without duplicate product entries
+        $existingProductIds = WishlistItem::where('user_id', $userId)->pluck('product_id')->all();
+
+        WishlistItem::where('session_token', $token)
+            ->whereNotIn('product_id', $existingProductIds)
+            ->update(['user_id' => $userId]);
+
+        WishlistItem::where('session_token', $token)->delete();
     }
 }

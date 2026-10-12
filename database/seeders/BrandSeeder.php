@@ -10,14 +10,12 @@ class BrandSeeder extends Seeder
     public function run(): void
     {
         $brands = [
-            ['name' => 'Apple', 'slug' => 'apple', 'logo' => 'assets/images/brands/1.png'],
-            ['name' => 'Samsung', 'slug' => 'samsung', 'logo' => 'assets/images/brands/2.png'],
-            ['name' => 'Sony', 'slug' => 'sony', 'logo' => 'assets/images/brands/3.png'],
-            ['name' => 'Nike', 'slug' => 'nike', 'logo' => 'assets/images/brands/4.png'],
-            ['name' => 'Canon', 'slug' => 'canon', 'logo' => 'assets/images/brands/5.png'],
-            ['name' => 'Asus', 'slug' => 'asus', 'logo' => 'assets/images/brands/6.png'],
-            ['name' => 'Bose', 'slug' => 'bose', 'logo' => 'assets/images/brands/7.png'],
-            ['name' => 'Philips', 'slug' => 'philips', 'logo' => 'assets/images/brands/8.png'],
+            ['name' => 'Clothes™ Atelier', 'slug' => 'clothes-atelier', 'logo' => 'assets/images/brands/1.png'],
+            ['name' => 'Nike ACG', 'slug' => 'nike-acg', 'logo' => 'assets/images/brands/4.png'],
+            ['name' => 'Adidas Originals', 'slug' => 'adidas-originals', 'logo' => 'assets/images/brands/2.png'],
+            ['name' => 'New Balance Heritage', 'slug' => 'new-balance', 'logo' => 'assets/images/brands/3.png'],
+            ['name' => 'Linen Craft Guild', 'slug' => 'linen-craft', 'logo' => 'assets/images/brands/5.png'],
+            ['name' => 'Modern Minimalist Co.', 'slug' => 'modern-minimalist', 'logo' => 'assets/images/brands/6.png'],
         ];
 
         foreach ($brands as $brand) {

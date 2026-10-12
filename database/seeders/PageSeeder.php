@@ -18,12 +18,12 @@ class PageSeeder extends Seeder
         $pages = [
             [
                 'slug' => 'about',
-                'title' => 'About Molla',
-                'subtitle' => 'Who we are & our guiding vision',
+                'title' => 'About Clothes™',
+                'subtitle' => 'Minimalism in Everyday Wear',
                 'banner_image' => 'assets/images/about-header-bg.jpg',
-                'content' => '<p class="lead text-primary mb-3">We believe high craftsmanship and cutting-edge tech should be accessible to all.</p><p>Sed pretium, ligula sollicitudin laoreet viverra, tortor libero sodales leo, eget blandit nunc tortor eu nibh. Suspendisse pulvinar, augue ac venenatis condimentum, sem libero volutpat nibh, nec pellentesque velit pede quis nunc. Phasellus blandit leo ut odio. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.</p>',
-                'meta_title' => 'About Us - Molla eCommerce',
-                'meta_description' => 'Learn more about Molla, our story, team, and passion for excellence.',
+                'content' => '<p class="lead text-primary mb-3">Clothes™ is built on the premise that everyday wear should be intentional, elevated, and timeless.</p><p>In a retail climate crowded with disposable fast-fashion and inaccessible ultra-luxury, Clothes™ positions itself in the sweet spot of accessible conscious luxury: premium tactile fabrics, minimalist silhouettes, and a calm, curated customer journey. We champion linen, long-staple cotton, and breathable weaves designed to transition seamlessly from morning coffee to evening gatherings.</p>',
+                'meta_title' => 'About Us - Clothes™',
+                'meta_description' => 'Learn more about Clothes™, our philosophy of accessible conscious luxury, zero-waste wardrobe essentials, and tactile quality.',
             ],
             [
                 'slug' => 'contact',
@@ -100,7 +100,7 @@ class PageSeeder extends Seeder
         ];
 
         foreach ($pages as $p) {
-            Page::create(array_merge($p, ['is_active' => true]));
+            Page::updateOrCreate(['slug' => $p['slug']], array_merge($p, ['is_active' => true]));
         }
 
         // 2. Team Members

@@ -21,17 +21,9 @@ class CheckoutController extends Controller
      */
     private function getCart(): ?Cart
     {
-        $token = get_cart_session_token();
-        $userId = Auth::id();
-
-        return Cart::with(['items.product', 'coupon'])
-            ->where(function ($q) use ($token, $userId) {
-                if ($userId) {
-                    $q->where('user_id', $userId)->orWhere('session_token', $token);
-                } else {
-                    $q->where('session_token', $token);
-                }
-            })->first();
+        return Cart::forCurrentSession()
+            ->with(['items.product', 'coupon'])
+            ->first();
     }
 
     /**

@@ -10,7 +10,6 @@ use App\Models\ShippingMethod;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
@@ -19,27 +18,7 @@ class CartController extends Controller
      */
     private function getCart(): Cart
     {
-        $token = get_cart_session_token();
-        $userId = Auth::id();
-
-        $cart = Cart::where(function ($q) use ($token, $userId) {
-            if ($userId) {
-                $q->where('user_id', $userId)->orWhere('session_token', $token);
-            } else {
-                $q->where('session_token', $token);
-            }
-        })->first();
-
-        if (! $cart) {
-            $cart = Cart::create([
-                'session_token' => $token,
-                'user_id' => $userId,
-            ]);
-        } elseif ($userId && ! $cart->user_id) {
-            $cart->update(['user_id' => $userId]);
-        }
-
-        return $cart;
+        return Cart::currentOrCreate();
     }
 
     /**

@@ -10,12 +10,12 @@ class HomeContentSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Home services features strip
+        // 1. Home services features strip (Clothes Brand Pillars)
         Feature::create([
             'position' => 'home_services',
             'icon' => 'icon-rocket',
-            'title' => 'Free Shipping',
-            'description' => 'Orders $50 or more',
+            'title' => 'Complimentary Shipping',
+            'description' => 'On all orders over $100',
             'sort_order' => 1,
             'is_active' => true,
         ]);
@@ -23,26 +23,26 @@ class HomeContentSeeder extends Seeder
         Feature::create([
             'position' => 'home_services',
             'icon' => 'icon-rotate-left',
-            'title' => 'Free Returns',
-            'description' => 'Within 30 days',
+            'title' => '30-Day Hassle-Free Returns',
+            'description' => 'Frictionless and complimentary',
             'sort_order' => 2,
             'is_active' => true,
         ]);
 
         Feature::create([
             'position' => 'home_services',
-            'icon' => 'icon-info-circle',
-            'title' => 'Get 20% Off 1 Item',
-            'description' => 'When you sign up',
+            'icon' => 'icon-star',
+            'title' => 'Tactile Quality Fabrics',
+            'description' => 'Linen, long-staple cotton & silk',
             'sort_order' => 3,
             'is_active' => true,
         ]);
 
         Feature::create([
             'position' => 'home_services',
-            'icon' => 'icon-life-ring',
-            'title' => 'We Support',
-            'description' => '24/7 amazing services',
+            'icon' => 'icon-lock',
+            'title' => 'Encrypted Checkout',
+            'description' => 'Instant & secured transactions',
             'sort_order' => 4,
             'is_active' => true,
         ]);

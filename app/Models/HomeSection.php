@@ -46,21 +46,33 @@ class HomeSection extends Model
     }
 
     /**
-     * Resolve the products for this section based on its type.
+     * Resolve and return products for this section with images, categories, and ratings.
      */
-    public function getResolvedProductsAttribute()
+    public function resolveProducts()
     {
         $limit = $this->item_limit ?: 8;
 
         return match ($this->type) {
-            'featured' => Product::active()->featured()->with('images', 'category')->take($limit)->get(),
-            'new' => Product::active()->newest()->with('images', 'category')->take($limit)->get(),
-            'on_sale' => Product::active()->onSale()->with('images', 'category')->take($limit)->get(),
+            'featured' => Product::active()->featured()->with(['images', 'category'])->withRatingSummary()->take($limit)->get(),
+            'new' => Product::active()->newest()->with(['images', 'category'])->withRatingSummary()->take($limit)->get(),
+            'on_sale' => Product::active()->onSale()->with(['images', 'category'])->withRatingSummary()->take($limit)->get(),
             'category' => $this->category_id
-                ? Product::active()->where('category_id', $this->category_id)->with('images', 'category')->take($limit)->get()
-                : Product::active()->with('images', 'category')->take($limit)->get(),
-            'manual' => $this->products()->with('images', 'category')->take($limit)->get(),
-            default => Product::active()->with('images', 'category')->take($limit)->get(),
+                ? Product::active()->where('category_id', $this->category_id)->with(['images', 'category'])->withRatingSummary()->take($limit)->get()
+                : Product::active()->with(['images', 'category'])->withRatingSummary()->take($limit)->get(),
+            'manual' => $this->products()->with(['images', 'category'])->withRatingSummary()->take($limit)->get(),
+            default => Product::active()->with(['images', 'category'])->withRatingSummary()->take($limit)->get(),
         };
+    }
+
+    /**
+     * Accessor for resolved section products.
+     */
+    public function getResolvedProductsAttribute()
+    {
+        if ($this->relationLoaded('loadedProducts')) {
+            return $this->getRelation('loadedProducts');
+        }
+
+        return $this->resolveProducts();
     }
 }
