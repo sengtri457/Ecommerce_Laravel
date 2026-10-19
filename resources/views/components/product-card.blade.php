@@ -20,7 +20,7 @@
             <form action="{{ route('wishlist.toggle') }}" method="POST" class="d-inline">
                 @csrf
                 <input type="hidden" name="product_id" value="{{ $product->id }}">
-                <button type="submit" class="btn-product-icon btn-wishlist" title="Save to wishlist" style="border: 1px solid #e6e6e2; background: rgba(255,255,255,0.95); width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s ease;">
+                <button type="submit" class="btn-product-icon" title="Save to wishlist" style="border: 1px solid #e6e6e2; background: rgba(255,255,255,0.95); width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s ease;">
                     <i class="icon-heart-o" style="font-size: 1.4rem; color: #1A1A1A;"></i>
                 </button>
             </form>

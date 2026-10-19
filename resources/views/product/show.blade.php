@@ -64,12 +64,20 @@
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
 
                             @if($product->colorAttributes()->isNotEmpty())
-                                <div class="details-filter-row details-row-size">
-                                    <label>Color:</label>
-                                    <div class="product-nav product-nav-dots">
+                                <div class="details-filter-row details-row-size align-items-center mb-3">
+                                    <label class="mb-0 mr-3" style="font-weight: 500; font-size: 1.4rem;">Color:</label>
+                                    <div class="product-nav-colors d-flex flex-wrap align-items-center" style="gap: 8px;">
                                         @foreach($product->colorAttributes() as $col)
-                                            <span class="mr-2 px-2 py-1 border rounded" style="background-color: {{ $col->color_code ?? '#eee' }}; font-size: 1.1rem;">{{ $col->value }}</span>
+                                            <button type="button" 
+                                                class="color-option-btn {{ $loop->first ? 'active' : '' }}" 
+                                                data-color-id="{{ $col->id }}"
+                                                data-color-name="{{ $col->value }}"
+                                                title="{{ $col->value }}">
+                                                <span class="color-swatch-circle" style="background-color: {{ $col->color_code ?? '#e0e0e0' }};"></span>
+                                                <span class="color-name-label">{{ $col->value }}</span>
+                                            </button>
                                         @endforeach
+                                        <input type="hidden" name="color_id" id="selected-color-id" value="{{ $product->colorAttributes()->first()?->id }}">
                                     </div>
                                 </div>
                             @endif
@@ -276,3 +284,158 @@
     </div>
 </div>
 @endsection
+
+@push('styles')
+<style>
+    /* Left-side Gallery Vertical Layout */
+    .product-gallery-vertical .row {
+        margin-left: -6px;
+        margin-right: -6px;
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: flex-start;
+    }
+    .product-gallery-vertical .product-main-image {
+        flex: 0 0 calc(80% - 12px);
+        max-width: calc(80% - 12px);
+        margin: 0 6px 1.5rem 6px;
+        background: #fbfbf9;
+        border: 1px solid var(--brand-border);
+        border-radius: 8px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 480px;
+    }
+    .product-gallery-vertical .product-main-image img {
+        max-width: 100%;
+        max-height: 560px;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        transition: opacity 0.2s ease;
+    }
+    .product-gallery-vertical .product-image-gallery {
+        flex: 0 0 calc(20% - 12px);
+        max-width: calc(20% - 12px);
+        margin: 0 6px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-content: flex-start;
+    }
+    .product-gallery-vertical .product-gallery-item {
+        display: block;
+        width: 100%;
+        aspect-ratio: 1 / 1.15;
+        background: #fbfbf9;
+        border: 2px solid var(--brand-border) !important;
+        border-radius: 6px;
+        overflow: hidden;
+        padding: 0 !important;
+        margin: 0 !important;
+        position: relative;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .product-gallery-vertical .product-gallery-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    .product-gallery-vertical .product-gallery-item:before,
+    .product-gallery-vertical .product-gallery-item:after {
+        display: none !important;
+    }
+    .product-gallery-vertical .product-gallery-item:hover {
+        border-color: var(--brand-terracotta) !important;
+        opacity: 0.9;
+    }
+    .product-gallery-vertical .product-gallery-item.active {
+        border-color: var(--brand-terracotta) !important;
+        box-shadow: 0 0 0 1px var(--brand-terracotta);
+    }
+
+    /* Color Selector Pill Buttons */
+    .color-option-btn {
+        display: inline-flex;
+        align-items: center;
+        background: #ffffff;
+        border: 1.5px solid var(--brand-border);
+        border-radius: 30px;
+        padding: 6px 14px 6px 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        outline: none;
+    }
+    .color-option-btn:hover {
+        border-color: var(--brand-terracotta);
+        transform: translateY(-1px);
+    }
+    .color-option-btn.active {
+        border-color: var(--brand-terracotta);
+        background: rgba(163, 92, 73, 0.06);
+        box-shadow: 0 0 0 1px var(--brand-terracotta);
+    }
+    .color-swatch-circle {
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        margin-right: 8px;
+        flex-shrink: 0;
+    }
+    .color-name-label {
+        font-size: 1.25rem;
+        font-weight: 500;
+        color: var(--brand-charcoal);
+        line-height: 1;
+    }
+    .color-option-btn.active .color-name-label {
+        color: var(--brand-terracotta-dark);
+        font-weight: 600;
+    }
+</style>
+@endpush
+
+@push('scripts')
+<script>
+    $(document).ready(function () {
+        // Thumbnail click handler to switch main image smoothly
+        $('.product-gallery-item').on('click', function (e) {
+            e.preventDefault();
+            var $this = $(this);
+            var newImgSrc = $this.data('image') || $this.find('img').attr('src');
+            var newZoomSrc = $this.data('zoom-image') || newImgSrc;
+
+            $('.product-gallery-item').removeClass('active');
+            $this.addClass('active');
+
+            var $mainImg = $('#product-zoom');
+            $mainImg.css('opacity', '0.25');
+            setTimeout(function () {
+                $mainImg.attr('src', newImgSrc);
+                $mainImg.attr('data-zoom-image', newZoomSrc);
+                $mainImg.css('opacity', '1');
+
+                // Update elevateZoom if initialized
+                var ez = $mainImg.data('elevateZoom');
+                if (ez && typeof ez.swaptheimage === 'function') {
+                    ez.swaptheimage(newImgSrc, newZoomSrc);
+                }
+            }, 100);
+        });
+
+        // Color selector active toggle
+        $('.color-option-btn').on('click', function () {
+            $('.color-option-btn').removeClass('active');
+            $(this).addClass('active');
+            var colorId = $(this).data('color-id');
+            $('#selected-color-id').val(colorId);
+        });
+    });
+</script>
+@endpush
