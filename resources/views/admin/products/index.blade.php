@@ -47,8 +47,13 @@
                 @forelse($products as $product)
                     <tr>
                         <td>
-                            <div class="font-weight-bold">{{ $product->name }}</div>
-                            <small class="text-muted">{{ Str::limit($product->short_description, 40) }}</small>
+                            <div class="d-flex align-items-center">
+                                <img src="{{ asset($product->primary_image) }}" alt="{{ $product->name }}" class="rounded border mr-2 flex-shrink-0" style="width: 44px; height: 44px; object-fit: cover;">
+                                <div>
+                                    <div class="font-weight-bold">{{ $product->name }}</div>
+                                    <small class="text-muted">{{ Str::limit($product->short_description, 40) }}</small>
+                                </div>
+                            </div>
                         </td>
                         <td>{{ $product->category->name ?? 'None' }}</td>
                         <td><code>{{ $product->sku }}</code></td>
