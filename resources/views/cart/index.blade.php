@@ -148,6 +148,12 @@
                                 <a href="{{ route('checkout.index') }}" class="btn btn-primary btn-order btn-block">
                                     PROCEED TO CHECKOUT
                                 </a>
+
+                                @guest
+                                    <p class="text-center text-muted small mt-2 mb-0">
+                                        <i class="icon-user"></i> Sign in or registration is required to complete your order.
+                                    </p>
+                                @endguest
                             </div>
 
                             <a href="{{ route('shop.index') }}" class="btn btn-outline-dark-2 btn-block mb-3">

@@ -14,6 +14,14 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->redirectGuestsTo(function (Request $request) {
+            if ($request->is('checkout*')) {
+                session()->flash('info', 'Please sign in or create an account to proceed with your order.');
+            }
+
+            return route('login');
+        });
+
         $middleware->alias([
             'admin' => EnsureUserIsAdmin::class,
         ]);

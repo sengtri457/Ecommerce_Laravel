@@ -82,7 +82,7 @@ class AuthController extends Controller
         $request->session()->regenerate();
         $this->mergeGuestData($user->id);
 
-        return redirect()->route('account.dashboard')->with('success', 'Your account has been created successfully!');
+        return redirect()->intended(route('account.dashboard'))->with('success', 'Your account has been created successfully!');
     }
 
     /**

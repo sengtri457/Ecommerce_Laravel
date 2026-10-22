@@ -1,0 +1,1161 @@
+{
+    "info": {
+        "_postman_id": "ecommerce-laravel-6ad8d7d89ff5d",
+        "name": "Ecommerce Laravel (API & Web Endpoints)",
+        "description": "Complete collection of API and Web endpoints for the Ecommerce Laravel application.\n\n### How to use:\n1. Set `base_url` variable (default: `http://127.0.0.1:8000`).\n2. Run **API > Public > Login** or **Register** to automatically capture the Sanctum `token`.\n3. Authenticated requests use `{{token}}` in Bearer Auth.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://127.0.0.1:8000",
+            "type": "string"
+        },
+        {
+            "key": "token",
+            "value": "",
+            "type": "string"
+        }
+    ],
+    "item": [
+        {
+            "name": "1. REST API (Sanctum Tokens)",
+            "description": "Stateless API endpoints powered by Laravel Sanctum Bearer tokens.",
+            "item": [
+                {
+                    "name": "Register (Issue Token)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "var jsonData = pm.response.json();",
+                                    "if (jsonData.token) {",
+                                    "    pm.collectionVariables.set(\"token\", jsonData.token);",
+                                    "    console.log(\"Token saved: \" + jsonData.token);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"John Customer\",\n    \"email\": \"customer@example.com\",\n    \"password\": \"password123\",\n    \"phone\": \"0123456789\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/register",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "register"]
+                        }
+                    }
+                },
+                {
+                    "name": "Login (Issue Token)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "var jsonData = pm.response.json();",
+                                    "if (jsonData.token) {",
+                                    "    pm.collectionVariables.set(\"token\", jsonData.token);",
+                                    "    console.log(\"Token saved: \" + jsonData.token);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"admin@ecommerce.test\",\n    \"password\": \"password\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/login",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "login"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Authenticated User",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/user",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "user"]
+                        }
+                    }
+                },
+                {
+                    "name": "Logout (Revoke Token)",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/logout",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "logout"]
+                        }
+                    }
+                },
+                {
+                    "name": "Sanctum CSRF Cookie (For SPAs)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/sanctum/csrf-cookie",
+                            "host": ["{{base_url}}"],
+                            "path": ["sanctum", "csrf-cookie"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "2. Storefront & Catalog",
+            "item": [
+                {
+                    "name": "Home Page",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/",
+                            "host": ["{{base_url}}"],
+                            "path": [""]
+                        }
+                    }
+                },
+                {
+                    "name": "Shop Catalog (All Products)",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/shop?sort=newest&min_price=0&max_price=500",
+                            "host": ["{{base_url}}"],
+                            "path": ["shop"],
+                            "query": [
+                                {
+                                    "key": "sort",
+                                    "value": "newest"
+                                },
+                                {
+                                    "key": "min_price",
+                                    "value": "0"
+                                },
+                                {
+                                    "key": "max_price",
+                                    "value": "500"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Category Products",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/category/women",
+                            "host": ["{{base_url}}"],
+                            "path": ["category", "women"]
+                        }
+                    }
+                },
+                {
+                    "name": "Search Products",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/search?q=jacket",
+                            "host": ["{{base_url}}"],
+                            "path": ["search"],
+                            "query": [
+                                {
+                                    "key": "q",
+                                    "value": "jacket"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Product Details",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/product/sample-product-slug",
+                            "host": ["{{base_url}}"],
+                            "path": ["product", "sample-product-slug"]
+                        }
+                    }
+                },
+                {
+                    "name": "Submit Product Review",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "key": "rating",
+                                    "value": "5",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "title",
+                                    "value": "Great product!",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "review",
+                                    "value": "Really loved the quality and fast delivery.",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/product/sample-product-slug/review",
+                            "host": ["{{base_url}}"],
+                            "path": ["product", "sample-product-slug", "review"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "3. Cart, Wishlist & Compare",
+            "item": [
+                {
+                    "name": "View Cart",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/cart",
+                            "host": ["{{base_url}}"],
+                            "path": ["cart"]
+                        }
+                    }
+                },
+                {
+                    "name": "Add to Cart",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "key": "product_id",
+                                    "value": "1",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "quantity",
+                                    "value": "1",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/cart/add",
+                            "host": ["{{base_url}}"],
+                            "path": ["cart", "add"]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Cart Item",
+                    "request": {
+                        "method": "POST",
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "key": "item_id",
+                                    "value": "1",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "quantity",
+                                    "value": "2",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/cart/update",
+                            "host": ["{{base_url}}"],
+                            "path": ["cart", "update"]
+                        }
+                    }
+                },
+                {
+                    "name": "Remove from Cart",
+                    "request": {
+                        "method": "POST",
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "key": "item_id",
+                                    "value": "1",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/cart/remove",
+                            "host": ["{{base_url}}"],
+                            "path": ["cart", "remove"]
+                        }
+                    }
+                },
+                {
+                    "name": "Apply Coupon",
+                    "request": {
+                        "method": "POST",
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "key": "code",
+                                    "value": "SAVE10",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/cart/coupon",
+                            "host": ["{{base_url}}"],
+                            "path": ["cart", "coupon"]
+                        }
+                    }
+                },
+                {
+                    "name": "View Wishlist",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/wishlist",
+                            "host": ["{{base_url}}"],
+                            "path": ["wishlist"]
+                        }
+                    }
+                },
+                {
+                    "name": "Toggle Wishlist",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "key": "product_id",
+                                    "value": "1",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/wishlist/toggle",
+                            "host": ["{{base_url}}"],
+                            "path": ["wishlist", "toggle"]
+                        }
+                    }
+                },
+                {
+                    "name": "View Compare List",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/compare",
+                            "host": ["{{base_url}}"],
+                            "path": ["compare"]
+                        }
+                    }
+                },
+                {
+                    "name": "Toggle Compare Item",
+                    "request": {
+                        "method": "POST",
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "key": "product_id",
+                                    "value": "1",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/compare/toggle",
+                            "host": ["{{base_url}}"],
+                            "path": ["compare", "toggle"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "4. Checkout & Orders",
+            "item": [
+                {
+                    "name": "View Checkout Page",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/checkout",
+                            "host": ["{{base_url}}"],
+                            "path": ["checkout"]
+                        }
+                    }
+                },
+                {
+                    "name": "Place Order",
+                    "request": {
+                        "method": "POST",
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "key": "first_name",
+                                    "value": "John",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "last_name",
+                                    "value": "Doe",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "email",
+                                    "value": "john@example.com",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "phone",
+                                    "value": "0123456789",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "address",
+                                    "value": "123 Main Street",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "city",
+                                    "value": "Phnom Penh",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "payment_method",
+                                    "value": "cod",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "notes",
+                                    "value": "Please deliver in the afternoon.",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/checkout",
+                            "host": ["{{base_url}}"],
+                            "path": ["checkout"]
+                        }
+                    }
+                },
+                {
+                    "name": "Order Success Screen",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/order-success/ORD-12345",
+                            "host": ["{{base_url}}"],
+                            "path": ["order-success", "ORD-12345"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "5. Customer Account",
+            "item": [
+                {
+                    "name": "Account Dashboard",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/account",
+                            "host": ["{{base_url}}"],
+                            "path": ["account"]
+                        }
+                    }
+                },
+                {
+                    "name": "Account Profile",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/account/profile",
+                            "host": ["{{base_url}}"],
+                            "path": ["account", "profile"]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Profile",
+                    "request": {
+                        "method": "POST",
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "key": "name",
+                                    "value": "John Updated",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "email",
+                                    "value": "john@example.com",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "phone",
+                                    "value": "0987654321",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/account/profile",
+                            "host": ["{{base_url}}"],
+                            "path": ["account", "profile"]
+                        }
+                    }
+                },
+                {
+                    "name": "Order History",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/account/orders",
+                            "host": ["{{base_url}}"],
+                            "path": ["account", "orders"]
+                        }
+                    }
+                },
+                {
+                    "name": "Order Details",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/account/orders/ORD-12345",
+                            "host": ["{{base_url}}"],
+                            "path": ["account", "orders", "ORD-12345"]
+                        }
+                    }
+                },
+                {
+                    "name": "Address Book",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/account/addresses",
+                            "host": ["{{base_url}}"],
+                            "path": ["account", "addresses"]
+                        }
+                    }
+                },
+                {
+                    "name": "Store Address",
+                    "request": {
+                        "method": "POST",
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "key": "recipient_name",
+                                    "value": "John Doe",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "phone",
+                                    "value": "0123456789",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "address_line_1",
+                                    "value": "Building 4, St. 2004",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "city",
+                                    "value": "Phnom Penh",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "is_default",
+                                    "value": "1",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/account/addresses",
+                            "host": ["{{base_url}}"],
+                            "path": ["account", "addresses"]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Address",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "{{base_url}}/account/addresses/1/delete",
+                            "host": ["{{base_url}}"],
+                            "path": ["account", "addresses", "1", "delete"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "6. Blog, Content & Support",
+            "item": [
+                {
+                    "name": "Blog Posts",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/blog",
+                            "host": ["{{base_url}}"],
+                            "path": ["blog"]
+                        }
+                    }
+                },
+                {
+                    "name": "Blog Single Post",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/blog/sample-post-slug",
+                            "host": ["{{base_url}}"],
+                            "path": ["blog", "sample-post-slug"]
+                        }
+                    }
+                },
+                {
+                    "name": "Post Blog Comment",
+                    "request": {
+                        "method": "POST",
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "key": "name",
+                                    "value": "Jane",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "email",
+                                    "value": "jane@example.com",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "comment",
+                                    "value": "Great informative article!",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/blog/sample-post-slug/comment",
+                            "host": ["{{base_url}}"],
+                            "path": ["blog", "sample-post-slug", "comment"]
+                        }
+                    }
+                },
+                {
+                    "name": "About Us Page",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/about",
+                            "host": ["{{base_url}}"],
+                            "path": ["about"]
+                        }
+                    }
+                },
+                {
+                    "name": "Contact Page",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/contact",
+                            "host": ["{{base_url}}"],
+                            "path": ["contact"]
+                        }
+                    }
+                },
+                {
+                    "name": "Send Contact Message",
+                    "request": {
+                        "method": "POST",
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "key": "name",
+                                    "value": "John Inquirer",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "email",
+                                    "value": "john@example.com",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "subject",
+                                    "value": "Product Inquiry",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "message",
+                                    "value": "Do you ship to other provinces?",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/contact",
+                            "host": ["{{base_url}}"],
+                            "path": ["contact"]
+                        }
+                    }
+                },
+                {
+                    "name": "FAQ Page",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/faq",
+                            "host": ["{{base_url}}"],
+                            "path": ["faq"]
+                        }
+                    }
+                },
+                {
+                    "name": "Subscribe Newsletter",
+                    "request": {
+                        "method": "POST",
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "key": "email",
+                                    "value": "newsletter@example.com",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/newsletter",
+                            "host": ["{{base_url}}"],
+                            "path": ["newsletter"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "7. Admin Management (Admin Role)",
+            "item": [
+                {
+                    "name": "Admin Dashboard",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/admin",
+                            "host": ["{{base_url}}"],
+                            "path": ["admin"]
+                        }
+                    }
+                },
+                {
+                    "name": "Products - List",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/admin/products",
+                            "host": ["{{base_url}}"],
+                            "path": ["admin", "products"]
+                        }
+                    }
+                },
+                {
+                    "name": "Products - Store (with Image Upload)",
+                    "request": {
+                        "method": "POST",
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "name",
+                                    "value": "New Premium Jacket",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "category_id",
+                                    "value": "1",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "brand_id",
+                                    "value": "1",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "price",
+                                    "value": "89.99",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "sale_price",
+                                    "value": "69.99",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "stock",
+                                    "value": "25",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "short_description",
+                                    "value": "Water-resistant premium fabric.",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "description",
+                                    "value": "Full specifications and details.",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "is_active",
+                                    "value": "1",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "is_featured",
+                                    "value": "1",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "is_new",
+                                    "value": "1",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "primary_image_file",
+                                    "type": "file",
+                                    "src": []
+                                },
+                                {
+                                    "key": "gallery_images[]",
+                                    "type": "file",
+                                    "src": []
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/admin/products",
+                            "host": ["{{base_url}}"],
+                            "path": ["admin", "products"]
+                        }
+                    }
+                },
+                {
+                    "name": "Products - Update",
+                    "request": {
+                        "method": "PUT",
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "name",
+                                    "value": "Updated Product Name",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "category_id",
+                                    "value": "1",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "price",
+                                    "value": "99.00",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "stock",
+                                    "value": "30",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/admin/products/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["admin", "products", "1"]
+                        }
+                    }
+                },
+                {
+                    "name": "Products - Delete",
+                    "request": {
+                        "method": "DELETE",
+                        "url": {
+                            "raw": "{{base_url}}/admin/products/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["admin", "products", "1"]
+                        }
+                    }
+                },
+                {
+                    "name": "Categories - List",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/admin/categories",
+                            "host": ["{{base_url}}"],
+                            "path": ["admin", "categories"]
+                        }
+                    }
+                },
+                {
+                    "name": "Categories - Store",
+                    "request": {
+                        "method": "POST",
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "key": "name",
+                                    "value": "Footwear",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "icon",
+                                    "value": "icon-shoes",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/admin/categories",
+                            "host": ["{{base_url}}"],
+                            "path": ["admin", "categories"]
+                        }
+                    }
+                },
+                {
+                    "name": "Orders - List",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/admin/orders",
+                            "host": ["{{base_url}}"],
+                            "path": ["admin", "orders"]
+                        }
+                    }
+                },
+                {
+                    "name": "Orders - Update Status",
+                    "request": {
+                        "method": "POST",
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "key": "status",
+                                    "value": "processing",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/admin/orders/1/status",
+                            "host": ["{{base_url}}"],
+                            "path": ["admin", "orders", "1", "status"]
+                        }
+                    }
+                },
+                {
+                    "name": "Hero Slides - List",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/admin/slides",
+                            "host": ["{{base_url}}"],
+                            "path": ["admin", "slides"]
+                        }
+                    }
+                },
+                {
+                    "name": "Promo Banners - List",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/admin/banners",
+                            "host": ["{{base_url}}"],
+                            "path": ["admin", "banners"]
+                        }
+                    }
+                },
+                {
+                    "name": "Users - List",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/admin/users",
+                            "host": ["{{base_url}}"],
+                            "path": ["admin", "users"]
+                        }
+                    }
+                },
+                {
+                    "name": "Users - Toggle Role",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "{{base_url}}/admin/users/1/toggle-role",
+                            "host": ["{{base_url}}"],
+                            "path": ["admin", "users", "1", "toggle-role"]
+                        }
+                    }
+                },
+                {
+                    "name": "Settings - View",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/admin/settings",
+                            "host": ["{{base_url}}"],
+                            "path": ["admin", "settings"]
+                        }
+                    }
+                },
+                {
+                    "name": "Settings - Update",
+                    "request": {
+                        "method": "POST",
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "key": "site_name",
+                                    "value": "My Clothes Store",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "currency_symbol",
+                                    "value": "$",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/admin/settings",
+                            "host": ["{{base_url}}"],
+                            "path": ["admin", "settings"]
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

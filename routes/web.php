@@ -50,10 +50,12 @@ Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wi
 Route::get('/compare', [CompareController::class, 'index'])->name('compare.index');
 Route::post('/compare/toggle', [CompareController::class, 'toggle'])->name('compare.toggle');
 
-// 5. Checkout & Confirmation
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
-Route::get('/order-success/{number}', [CheckoutController::class, 'success'])->name('checkout.success');
+// 5. Checkout & Confirmation (Requires Authentication)
+Route::middleware('auth')->group(function () {
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+    Route::get('/order-success/{number}', [CheckoutController::class, 'success'])->name('checkout.success');
+});
 
 // 6. Authentication (Guest Only)
 Route::middleware('guest')->group(function () {

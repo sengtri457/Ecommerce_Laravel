@@ -111,12 +111,42 @@ class MollaStoreTest extends TestCase
         $getCompare->assertSee($product->name);
     }
 
+    public function test_guest_cannot_access_checkout_or_place_order(): void
+    {
+        $product = Product::where('stock', '>', 5)->first();
+        $this->assertNotNull($product);
+        $shipping = ShippingMethod::first();
+
+        // Add item to cart as guest
+        $this->post('/cart/add', [
+            'product_id' => $product->id,
+            'quantity' => 1,
+        ]);
+
+        // Attempt to visit checkout as guest
+        $checkoutPage = $this->get('/checkout');
+        $checkoutPage->assertRedirect(route('login'));
+
+        // Attempt to submit checkout as guest
+        $response = $this->post('/checkout', [
+            'customer_name' => 'Guest User',
+            'customer_email' => 'guest@test.com',
+            'customer_phone' => '1234567890',
+            'shipping_address' => '123 Delivery Road, NY',
+            'shipping_method_id' => $shipping->id,
+            'payment_method' => 'cod',
+        ]);
+        $response->assertRedirect(route('login'));
+    }
+
     public function test_checkout_places_order_and_reduces_stock(): void
     {
         $product = Product::where('stock', '>', 5)->first();
         $this->assertNotNull($product);
         $initialStock = $product->stock;
         $shipping = ShippingMethod::first();
+        $user = User::where('role', 'customer')->first();
+        $this->assertNotNull($user);
 
         // Add item to cart
         $this->post('/cart/add', [
@@ -124,13 +154,16 @@ class MollaStoreTest extends TestCase
             'quantity' => 1,
         ]);
 
+        // Act as authenticated user
+        $this->actingAs($user);
+
         $checkoutPage = $this->get('/checkout');
         $checkoutPage->assertStatus(200);
 
         // Submit checkout
         $response = $this->post('/checkout', [
             'customer_name' => 'Test Customer',
-            'customer_email' => 'customer@test.com',
+            'customer_email' => $user->email,
             'customer_phone' => '1234567890',
             'shipping_address' => '123 Delivery Road, NY',
             'shipping_method_id' => $shipping->id,

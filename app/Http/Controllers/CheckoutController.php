@@ -31,6 +31,10 @@ class CheckoutController extends Controller
      */
     public function index(): View|RedirectResponse
     {
+        if (! Auth::check()) {
+            return redirect()->guest(route('login'))->with('info', 'Please sign in or create an account to proceed with your order.');
+        }
+
         $cart = $this->getCart();
 
         if (! $cart || $cart->items->count() === 0) {
@@ -38,7 +42,7 @@ class CheckoutController extends Controller
         }
 
         $shippingMethods = ShippingMethod::active()->get();
-        $savedAddresses = Auth::check() ? Auth::user()->addresses : collect();
+        $savedAddresses = Auth::user()->addresses;
 
         return view('checkout.index', [
             'pageTitle' => 'Checkout - '.setting('site_name', 'Molla'),
@@ -53,6 +57,10 @@ class CheckoutController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        if (! Auth::check()) {
+            return redirect()->guest(route('login'))->with('error', 'You must be signed in to place an order.');
+        }
+
         $cart = $this->getCart();
 
         if (! $cart || $cart->items->count() === 0) {
@@ -130,9 +138,14 @@ class CheckoutController extends Controller
      */
     public function success(string $number): View
     {
-        $order = Order::where('order_number', $number)
-            ->with(['items.product.images', 'shippingMethod', 'coupon'])
-            ->firstOrFail();
+        $query = Order::where('order_number', $number)
+            ->with(['items.product.images', 'shippingMethod', 'coupon']);
+
+        if (! Auth::user()?->isAdmin()) {
+            $query->where('user_id', Auth::id());
+        }
+
+        $order = $query->firstOrFail();
 
         return view('checkout.success', [
             'pageTitle' => 'Order Confirmed - '.$order->order_number,
